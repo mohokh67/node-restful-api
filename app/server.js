@@ -2,7 +2,6 @@ import config from './config/config'
 import http from 'http'
 import app from './app'
 
-// const reload = require("reload");
 // const server = require("http").Server(app);
 // var bodyParser = require("body-parser");
 
@@ -14,7 +13,5 @@ let port = app.get('port');
 
 const server = http.createServer(app)
 
-//use reload - reload broswer for every change
-// reload(app);
 server.listen(port)
 
