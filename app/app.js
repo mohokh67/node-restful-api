@@ -1,13 +1,16 @@
 import express from 'express'
 import morgan from 'morgan'
+import bodyParser from 'body-parser'
+
 const app = express()
 
 // Import routes
 import productsRoute from './api/routes/products'
 import ordersRoute from './api/routes/orders'
 
-// Log
 app.use(morgan('dev'))
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 // Use routes
 app.use('/products', productsRoute);
