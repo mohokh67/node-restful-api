@@ -1,13 +1,15 @@
 import express from 'express'
-const app = express()
 import morgan from 'morgan'
+const app = express()
 
+// Import routes
 import productsRoute from './api/routes/products'
 import ordersRoute from './api/routes/orders'
 
+// Log
 app.use(morgan('dev'))
 
-// Routes
+// Use routes
 app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
 
@@ -18,6 +20,7 @@ app.use((req, res, next)=> {
     next(error)
 })
 
+// error handler
 app.use((error, req, res, next)=> {
     res.status(error.status || 500)
     res.json({
