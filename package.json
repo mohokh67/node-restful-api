@@ -1,0 +1,22 @@
+{
+  "name": "node.restful_api",
+  "version": "1.0.0",
+  "description": "A Node.js API project",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon ./app/server.js --exec babel-node -e js --watch app",
+    "debug": "DEBUG=* npm run start"
+  },
+  "keywords": [],
+  "author": "MoHo Khaleqi",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "nodemon": "^1.15.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-stage-0": "^6.24.1"
+  }
+}
