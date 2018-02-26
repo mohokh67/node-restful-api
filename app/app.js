@@ -1,12 +1,16 @@
+import config from './config/config'
 import express from 'express'
 import morgan from 'morgan'
 import bodyParser from 'body-parser'
+import mongoose from 'mongoose'
 
 const app = express()
 
 // Import routes
 import productsRoute from './api/routes/products'
 import ordersRoute from './api/routes/orders'
+
+mongoose.connect(config.db.mongodbLinkMlab)
 
 app.use(morgan('dev'))
 app.use(bodyParser.json());

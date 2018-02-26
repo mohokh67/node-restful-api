@@ -1,43 +1,99 @@
 import express from 'express'
 const router = express.Router()
 
+import Product from '../models/product'
+
+// All
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling GET requests to /products'
-    })
+    Product.find()
+        .exec()
+        .then(docs =>{
+            console.log(docs)
+            //if(docs.length >= 0){
+                res.status(200).json(docs)
+            // } else {
+            //     res.status(404).json({message: 'There is no product in DB' })
+            // }
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({error: error})
+        })
 })
 
+// Create one
 router.post('/', (req, res, next) => {
-    let product = {
+    let product = new Product({
         name: req.body.name,
         price: req.body.price
-    }
-    res.status(201).json({
-        message: 'Handling POST request in /products',
-        product: product
     })
+    product.save()
+        .then(result =>{
+            console.log(result)
+            res.status(201).json(result)
+        })
+        .catch(error =>{
+            console.log(error)
+            res.status(500).json({error: error})
+       })
 })
 
+// Find one
 router.get('/:id', (req, res, next) => {
     let id = req.params.id
-    res.status(200).json({
-        message: 'Handling GET requests to /products/' + id
-    })
+    Product.findById(id)
+        .exec()
+        .then(doc =>{
+            console.log(doc)
+            if(doc){
+                res.status(200).json(doc)
+            } else {
+                res.status(404).json({message: 'No valid entry found for ID: ' + id })
+            }
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({error: error})
+        })
 })
 
+// Update one
+// Request format:
+// [
+// 	{ "propName":"name", "value": "Better Washing machine" },
+// 	{ "propName":"price", "value": "333" }
+// ]
 router.patch('/:id', (req, res, next) => {
     let id = req.params.id
-    res.status(200).json({
-        message: 'Handling UPDATE requests to /products/' + id
-    })
+    let updateOperations = {}
+    for(let operation of req.body){
+        updateOperations[operation.propName] = operation.value
+    }
+    Product.update({ _id: id }, { $set: updateOperations })
+        .exec()
+        .then(result =>{
+            console.log(result)
+            res.status(200).json(result)
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({error: error})
+        })
 })
 
+// Remove one
 router.delete('/:id', (req, res, next) => {
     let id = req.params.id
-    res.status(200).json({
-        message: 'Handling DELETE requests to /products/' + id
-    })
+    Product.remove({ _id: id })
+        .exec()
+        .then(result =>{
+            console.log(result)
+            res.status(200).json(result)
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({error: error})
+        })
 })
-
 
 module.exports = router
