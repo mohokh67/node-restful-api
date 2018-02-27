@@ -22,6 +22,10 @@ router.get('/', (req, res, next) => {
 })
 
 // Create one
+// {
+// 	"name": "Washing machine",
+// 	"price": "250.00"
+// }
 router.post('/', (req, res, next) => {
     let product = new Product({
         name: req.body.name,
