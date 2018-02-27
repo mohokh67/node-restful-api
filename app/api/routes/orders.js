@@ -10,6 +10,7 @@ import Product from '../models/product'
 router.get('/', (req, res, next) => {
     Order.find()
         .select('_id product quantity')
+        .populate('product', 'name price')
         .exec()
         .then(docs =>{
             let response = {
@@ -83,6 +84,7 @@ router.get('/:id', (req, res, next) => {
     let id = req.params.id
     Order.findById(id)
         .select('_id product quantity')
+        .populate('product')
         .exec()
         .then(doc =>{
             console.log(doc)
