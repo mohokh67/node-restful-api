@@ -1,4 +1,4 @@
-import config from './config/config'
+import config from './../config/config'
 import http from 'http'
 import app from './app'
 

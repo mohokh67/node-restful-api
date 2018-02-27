@@ -1,4 +1,4 @@
-import config from './../../config/config'
+import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
 
