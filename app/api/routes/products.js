@@ -26,13 +26,17 @@ router.get('/', (req, res, next) => {
                 })
             }
             //if(docs.length >= 0){
-                res.status(200).json(response)
+                res.status(200).json({
+                    message: 'success',
+                    list : response
+                })
             // } else {
             //     res.status(404).json({message: 'There is no product in DB' })
             // }
         })
         .catch(error =>{
              console.log(error)
+             message: 'error',
              res.status(500).json({error: error})
         })
 })
@@ -47,7 +51,7 @@ router.post('/', (req, res, next) => {
         .then(result =>{
             console.log(result)
             res.status(201).json({
-                message: 'Product created successfully',
+                message: 'success',
                 createdProduct: {
                     _id: result._id,
                     name: result.name,
@@ -61,6 +65,7 @@ router.post('/', (req, res, next) => {
         })
         .catch(error =>{
             console.log(error)
+            message: 'error',
             res.status(500).json({error: error})
        })
 })
@@ -75,6 +80,7 @@ router.get('/:id', (req, res, next) => {
             console.log(doc)
             if(doc){
                 res.status(200).json({
+                    message: 'success',
                     product: doc,
                     request: {
                         type: 'GET',
@@ -88,6 +94,7 @@ router.get('/:id', (req, res, next) => {
         })
         .catch(error =>{
              console.log(error)
+             message: 'error',
              res.status(500).json({error: error})
         })
 })
@@ -104,7 +111,7 @@ router.patch('/:id', (req, res, next) => {
         .then(result =>{
             console.log(result)
             res.status(200).json({
-                message: 'Updated successfully',
+                message: 'success',
                 request: {
                     type: 'GET',
                     url: config.url + ':' + config.port + '/' + parentRoute + id
@@ -113,6 +120,7 @@ router.patch('/:id', (req, res, next) => {
         })
         .catch(error =>{
              console.log(error)
+             message: 'error',
              res.status(500).json({error: error})
         })
 })
