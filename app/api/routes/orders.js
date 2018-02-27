@@ -81,9 +81,32 @@ router.post('/', (req, res, next) => {
 
 router.get('/:id', (req, res, next) => {
     let id = req.params.id
-    res.status(200).json({
-        message: 'Order details' + id
-    })
+    Order.findById(id)
+        .select('_id product quantity')
+        .exec()
+        .then(doc =>{
+            console.log(doc)
+            if(doc){
+                res.status(200).json({
+                    message: 'success',
+                    product: doc,
+                    request: {
+                        type: 'GET',
+                        description: 'List of all orders',
+                        url: config.url + ':' + config.port + '/' + parentRoute
+                    }
+                })
+            } else {
+                res.status(404).json({message: 'No valid entry found for ID: ' + id })
+            }
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
+        })
 })
 
 router.delete('/:id', (req, res, next) => {
