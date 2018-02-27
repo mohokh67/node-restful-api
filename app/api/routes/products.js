@@ -22,10 +22,6 @@ router.get('/', (req, res, next) => {
 })
 
 // Create one
-// {
-// 	"name": "Washing machine",
-// 	"price": "250.00"
-// }
 router.post('/', (req, res, next) => {
     let product = new Product({
         name: req.body.name,
@@ -62,11 +58,6 @@ router.get('/:id', (req, res, next) => {
 })
 
 // Update one
-// Request format:
-// [
-// 	{ "propName":"name", "value": "Better Washing machine" },
-// 	{ "propName":"price", "value": "333" }
-// ]
 router.patch('/:id', (req, res, next) => {
     let id = req.params.id
     let updateOperations = {}
