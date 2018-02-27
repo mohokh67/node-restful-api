@@ -5,21 +5,57 @@ import mongoose from 'mongoose'
 
 const parentRoute = 'orders/'
 import Order from '../models/order'
+import Product from '../models/product'
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'orders were fetched'
-    })
+    Order.find()
+        .select('_id product quantity')
+        .exec()
+        .then(docs =>{
+            let response = {
+                count: docs.length,
+                products: docs.map(doc => {
+                    return {
+                        _id: doc._id,
+                        product: doc.product,
+                        quantity: doc.quantity,
+                        request: {
+                            type: 'GET',
+                            url: config.url + ':' + config.port + '/'+ parentRoute  + doc._id
+                        }
+                    }
+                })
+            }
+            res.status(200).json({
+                message: 'success',
+                list : response
+            })
+        })
+        .catch(error =>{
+            console.log(error)
+            res.status(500).json({
+                message: 'error',
+                error: error
+            })
+        })
 })
 
 router.post('/', (req, res, next) => {
-    let order = new Order({
-        product: req.body.productId,
-        quantity: req.body.quantity
-    })
-
-    order.save()
-         .then(result =>{
+    Product.findById(req.body.productId)
+        .then(product => {
+            if(!product){
+                return res.status(404).json({
+                    message: 'error',
+                    detail: 'Product not found'
+                })
+            }
+            let order = new Order({
+                product: req.body.productId,
+                quantity: req.body.quantity
+            })
+            return order.save()
+        })
+        .then(result =>{
             res.status(201).json({
                 message: 'OK',
                 createdOrder: {
@@ -31,16 +67,15 @@ router.post('/', (req, res, next) => {
                         url: config.url + ':' + config.port + '/'+ parentRoute + result._id
                     }
                 }
-
             })
-         })
-         .catch(error =>{
-            console.log(error)
-            res.status(500).json({
-                message: 'error',
-                error: error
-            })
-         })
+        })
+        .catch(error =>{
+        console.log(error)
+        res.status(500).json({
+            message: 'error',
+            error: error
+        })
+        })
 
 })
 
