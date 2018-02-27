@@ -1,5 +1,10 @@
+import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
+import mongoose from 'mongoose'
+
+const parentRoute = 'orders/'
+import Order from '../models/order'
 
 router.get('/', (req, res, next) => {
     res.status(200).json({
@@ -8,14 +13,32 @@ router.get('/', (req, res, next) => {
 })
 
 router.post('/', (req, res, next) => {
-    let order = {
-        productId: req.body.productId,
+    let order = new Order({
+        product: req.body.productId,
         quantity: req.body.quantity
-    }
-    res.status(201).json({
-        message: 'order was created',
-        order: order
     })
+
+    order.save()
+         .then(result =>{
+            res.status(201).json({
+                message: 'OK',
+                createdOrder: {
+                    id: result._id,
+                    product: result.product,
+                    quantity: result.quantity,
+                    request: {
+                        type: 'GET',
+                        url: config.url + ':' + config.port + '/'+ parentRoute + result._id
+                    }
+                }
+
+            })
+         })
+         .catch(error =>{
+            console.log(error)
+            res.status(500).json({error: error})
+         })
+
 })
 
 router.get('/:id', (req, res, next) => {

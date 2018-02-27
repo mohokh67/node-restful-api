@@ -21,3 +21,12 @@ All products APIs are under `/products` route.
     { "propName":"price", "value": "333" }
 ]
 ```
+
+## Orders
+Creat a new order: `POST` request to `/orders` with this data:
+```
+{
+	"productId": "5a9507f2f5a1db1b17f7e06e",
+	"quantity": "2"
+}
+```
