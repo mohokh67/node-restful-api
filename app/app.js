@@ -10,6 +10,7 @@ const app = express()
 import productsRoute from './api/routes/products'
 import ordersRoute from './api/routes/orders'
 
+mongoose.Promise = Promise; // Use the ES6 promise for mongoose promise
 mongoose.connect(config.db.mongodbLinkMlab)
 
 app.use(morgan('dev'))

@@ -5,7 +5,7 @@ import app from './app'
 // const server = require("http").Server(app);
 
 app.set('port', process.env.PORT || config.port);
-let port = app.get('port');
+const port = app.get('port');
 
 const server = http.createServer(app)
 
