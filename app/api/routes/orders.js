@@ -111,9 +111,26 @@ router.get('/:id', (req, res, next) => {
 
 router.delete('/:id', (req, res, next) => {
     let id = req.params.id
-    res.status(200).json({
-        message: 'Order deleted' + id
-    })
+    Order.remove({ _id: id })
+        .exec()
+        .then(result =>{
+            console.log(result)
+            res.status(200).json({
+                message: 'success',
+                request: {
+                    type: 'GET',
+                    description: 'List of all orders',
+                    url: config.url + ':' + config.port + '/' + parentRoute
+                }
+            })
+        })
+        .catch(error =>{
+             console.log(error)
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
+        })
 })
 
 module.exports = router
