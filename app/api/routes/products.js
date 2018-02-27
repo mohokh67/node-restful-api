@@ -36,8 +36,10 @@ router.get('/', (req, res, next) => {
         })
         .catch(error =>{
              console.log(error)
-             message: 'error',
-             res.status(500).json({error: error})
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
         })
 })
 
@@ -65,8 +67,10 @@ router.post('/', (req, res, next) => {
         })
         .catch(error =>{
             console.log(error)
-            message: 'error',
-            res.status(500).json({error: error})
+            res.status(500).json({
+                message: 'error',
+                error: error
+            })
        })
 })
 
@@ -94,8 +98,10 @@ router.get('/:id', (req, res, next) => {
         })
         .catch(error =>{
              console.log(error)
-             message: 'error',
-             res.status(500).json({error: error})
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
         })
 })
 
@@ -121,7 +127,10 @@ router.patch('/:id', (req, res, next) => {
         .catch(error =>{
              console.log(error)
              message: 'error',
-             res.status(500).json({error: error})
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
         })
 })
 
@@ -143,7 +152,10 @@ router.delete('/:id', (req, res, next) => {
         })
         .catch(error =>{
              console.log(error)
-             res.status(500).json({error: error})
+             res.status(500).json({
+                message: 'error',
+                error: error
+             })
         })
 })
 
