@@ -9,6 +9,7 @@ const app = express()
 // Import routes
 import productsRoute from './api/routes/products'
 import ordersRoute from './api/routes/orders'
+import userRouter from './api/routes/user'
 
 mongoose.Promise = Promise; // Use the ES6 promise for mongoose promise
 mongoose.connect(config.db.mongodbLinkMlab)
@@ -33,6 +34,7 @@ app.use((req, res, next) => {
 // Use routes
 app.use('/products', productsRoute);
 app.use('/orders', ordersRoute);
+app.use('/user', userRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next)=> {
