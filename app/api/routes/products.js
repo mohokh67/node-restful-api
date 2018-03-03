@@ -1,14 +1,42 @@
 import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
+import multer from 'multer'
+import uniqid from 'uniqid'
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+       cb(null, './uploads/')
+    },
+    filename: (req, file, cb) => {
+        let fileName = file.originalname
+        //let fileExtension = fileName.split('.').pop()
+        let fileExtension = fileName.substr((fileName.lastIndexOf('.')))
+        cb(null, uniqid('product_') + fileExtension)
+    }
+})
+const fileFilter = (req, file, cb) => {
+    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        cb(null, true)
+    } else {
+        //reject all other types
+        cb(null, false)
+    }
+}
+const upload = multer({ storage: storage, limits: {
+        fileSize: 1024 * 1024 * 3 // Max 3 MB
+    },
+    fileFilter: fileFilter
+})
+
+// DB model
 import Product from '../models/product'
 
 const parentRoute = 'products/'
 // All
 router.get('/', (req, res, next) => {
     Product.find()
-        .select('_id name price')
+        .select('_id name price image')
         .exec()
         .then(docs =>{
             let response = {
@@ -18,6 +46,7 @@ router.get('/', (req, res, next) => {
                         _id: doc._id,
                         name: doc.name,
                         price: doc.price,
+                        image: doc.image,
                         request: {
                             type: 'GET',
                             url: config.url + ':' + config.port + '/'+ parentRoute  + doc._id
@@ -44,10 +73,13 @@ router.get('/', (req, res, next) => {
 })
 
 // Create one
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('productImage'), (req, res, next) => {
+    //console.log(req.file) // Uploaded file
+
     let product = new Product({
         name: req.body.name,
-        price: req.body.price
+        price: req.body.price,
+        image: req.file.path
     })
     product.save()
         .then(result =>{
@@ -78,7 +110,7 @@ router.post('/', (req, res, next) => {
 router.get('/:id', (req, res, next) => {
     let id = req.params.id
     Product.findById(id)
-        .select('_id name price')
+        .select('_id name price image')
         .exec()
         .then(doc =>{
             console.log(doc)

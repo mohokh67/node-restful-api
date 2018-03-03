@@ -14,6 +14,7 @@ mongoose.Promise = Promise; // Use the ES6 promise for mongoose promise
 mongoose.connect(config.db.mongodbLinkMlab)
 
 app.use(morgan('dev'))
+app.use('/uploads', express.static('uploads')) // make upload images available through URL
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -35,7 +36,7 @@ app.use('/orders', ordersRoute);
 
 // catch 404 and forward to error handler
 app.use((req, res, next)=> {
-    let error = new Error('Not found')
+    let error = new Error('Route Not found')
     error.status = 404
     next(error)
 })
