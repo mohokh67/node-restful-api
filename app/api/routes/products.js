@@ -1,4 +1,3 @@
-import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
 import multer from 'multer'

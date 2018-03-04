@@ -1,6 +1,5 @@
 import config from './../../../config/config'
 
-
 // DB model
 import Product from '../models/product'
 const parentRoute = 'products/'
