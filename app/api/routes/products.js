@@ -3,6 +3,7 @@ import express from 'express'
 const router = express.Router()
 import multer from 'multer'
 import uniqid from 'uniqid'
+import auth from './../middlewares/auth'
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -33,6 +34,7 @@ const upload = multer({ storage: storage, limits: {
 import Product from '../models/product'
 
 const parentRoute = 'products/'
+
 // All
 router.get('/', (req, res, next) => {
     Product.find()
@@ -73,8 +75,8 @@ router.get('/', (req, res, next) => {
 })
 
 // Create one
-router.post('/', upload.single('productImage'), (req, res, next) => {
-    //console.log(req.file) // Uploaded file
+router.post('/', auth, upload.single('productImage'), (req, res, next) => {
+    console.log(req.file) // Uploaded file
 
     let product = new Product({
         name: req.body.name,
@@ -138,7 +140,7 @@ router.get('/:id', (req, res, next) => {
 })
 
 // Update one
-router.patch('/:id', (req, res, next) => {
+router.patch('/:id', auth, (req, res, next) => {
     let id = req.params.id
     let updateOperations = {}
     for(let operation of req.body){
@@ -167,7 +169,7 @@ router.patch('/:id', (req, res, next) => {
 })
 
 // Remove one
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', auth, (req, res, next) => {
     let id = req.params.id
     Product.remove({ _id: id })
         .exec()

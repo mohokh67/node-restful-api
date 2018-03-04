@@ -2,12 +2,13 @@ import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
 import mongoose from 'mongoose'
+import auth from './../middlewares/auth'
 
 const parentRoute = 'orders/'
 import Order from '../models/order'
 import Product from '../models/product'
 
-router.get('/', (req, res, next) => {
+router.get('/', auth, (req, res, next) => {
     Order.find()
         .select('_id product quantity')
         .populate('product', 'name price')
@@ -41,7 +42,7 @@ router.get('/', (req, res, next) => {
         })
 })
 
-router.post('/', (req, res, next) => {
+router.post('/', auth, (req, res, next) => {
     Product.findById(req.body.productId)
         .then(product => {
             if(!product){
@@ -80,7 +81,7 @@ router.post('/', (req, res, next) => {
 
 })
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', auth, (req, res, next) => {
     let id = req.params.id
     Order.findById(id)
         .select('_id product quantity')
@@ -111,7 +112,7 @@ router.get('/:id', (req, res, next) => {
         })
 })
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', auth, (req, res, next) => {
     let id = req.params.id
     Order.remove({ _id: id })
         .exec()
