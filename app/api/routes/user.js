@@ -57,4 +57,49 @@ router.post('/login', (req,res, next) =>{
 
 })
 
+router.delete('/:userId', (req, res, next)=>{
+    let userId = req.params.userId
+    User.find({ _id: userId })
+        .exec()
+        .then(foundUser => {
+            if(foundUser.length > 0) {
+                // Let's delete the user
+                User.remove({ _id: userId })
+                    .exec()
+                    .then(result => {
+                        //console.log(result)
+                        res.status(200).json({
+                            message: 'success'
+                        })
+                    })
+            } else {
+                res.status(404).json({
+                    message: 'User not found'
+                })
+            }
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'error',
+                error: error
+            })
+        })
+        /*
+    User.remove({ _id: userId })
+        .exec()
+        .then(result => {
+            console.log(result)
+            res.status(200).json({
+                message: 'success'
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'error',
+                error: error
+            })
+        })
+        */
+})
+
 module.exports = router
