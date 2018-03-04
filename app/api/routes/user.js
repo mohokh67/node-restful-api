@@ -4,10 +4,11 @@ const router = express.Router()
 import bcrypt from 'bcrypt'
 
 
+
 // DB model
 import User from '../models/user'
 
-router.post('/signup', (req,res, next) =>{
+router.post('/signup', (req, res, next) =>{
     let email = req.body.email
     User.find({ 'email': email})
         .exec()
@@ -53,8 +54,36 @@ router.post('/signup', (req,res, next) =>{
         .catch()
 })
 
-router.post('/login', (req,res, next) =>{
-
+router.post('/login', (req, res, next) =>{
+    let email = req.body.email
+    let password = req.body.password
+    User.find({ email: email })
+        .exec()
+        .then(user => {
+            if(user.length < 1){
+                return res.status(401).json({
+                    message: 'Auth failed'
+                })
+            }
+            bcrypt.compare(password, user[0].password, (error, result) => {
+                if(error || ! result) {
+                    return res.status(401).json({
+                        message: 'Auth failed',
+                    })
+                }
+                if(result) {
+                    return res.status(200).json({
+                        message: 'Auth successful'
+                    })
+                }
+            })
+        })
+        .catch(error => {
+            res.status(500).json({
+                message: 'error',
+                error: error
+            })
+        })
 })
 
 router.delete('/:userId', (req, res, next)=>{
