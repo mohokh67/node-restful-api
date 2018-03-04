@@ -2,7 +2,7 @@ import config from './../../../config/config'
 import express from 'express'
 const router = express.Router()
 import bcrypt from 'bcrypt'
-
+import jwt from 'jsonwebtoken'
 
 
 // DB model
@@ -60,6 +60,8 @@ router.post('/login', (req, res, next) =>{
     User.find({ email: email })
         .exec()
         .then(user => {
+            // user will be an array
+            // In signup we added the facility to aonly add unique email addresses
             if(user.length < 1){
                 return res.status(401).json({
                     message: 'Auth failed'
@@ -72,8 +74,19 @@ router.post('/login', (req, res, next) =>{
                     })
                 }
                 if(result) {
+                    let token = jwt.sign(
+                        {
+                            email: email,
+                            userId: user[0]._id
+                        },
+                        config.JWT_KEY,
+                        {
+                            expiresIn: "1h"
+                        }
+                    )
                     return res.status(200).json({
-                        message: 'Auth successful'
+                        message: 'Auth successful',
+                        toekn: token
                     })
                 }
             })
