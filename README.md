@@ -14,7 +14,7 @@ All products APIs are under `/products` route.
 }
 ```
 
-* Request format fro updating a product with `/products/:{productId}` with `PATCH` method:
+* Request format for updating a product with `/products/:{productId}` with `PATCH` method:
 ```
 [
     { "propName":"name", "value": "Washing Machine" },
