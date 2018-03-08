@@ -8,6 +8,7 @@ For testing purposed I used [postman](https://www.getpostman.com) and `nodemon`.
 ## Installation and run
 Make sure `Node.js` and `NPM` are installed in your system. Navigate to the project directory and then follow these steps:
 - `npm install` to install all packages and dependencies. You need dev packages as well in you dev machine.
+- Rename `config/config.example.js` to `config.js` and update the file for mongo db login credentials
 - `npm start` which boot up the server and wait for port 3000. You can change this port in `config/config.js` file
 - use [postman](https://www.getpostman.com) app and navigate to one of the [routes](#API) with `http://localhost:3000` to send the request and see the response with in the application.
 
